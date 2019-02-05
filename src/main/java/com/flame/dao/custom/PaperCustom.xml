@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8" ?>   
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.flame.dao.impl.PaperDaoImpl">
+
+	<!-- 分页查询试卷内容 -->
+	<sql id="findPaper_contion">
+		<where>
+			<if test="entity.paperName!='' and entity.paperName!=null">
+				AND PAPER_NAME LIKE
+				concat('%',
+				#{entity.paperName,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="entity.subject!='' and entity.subject!=null">
+				AND SUBJECT=#{entity.subject,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</sql>
+	<select id="findPaper_datas" parameterType="com.flame.base.model.Params"
+		resultType="com.flame.dto.PaperDto">
+		<include refid="mybatis.pageStartSQL" />
+		<include refid="selectFieldSQL" />
+		FROM T_PAPER
+		<include refid="findPaper_contion"></include>
+		<include refid="mybatis.pageEndSQL" />
+	</select>
+	<select id="findPaper_count" parameterType="com.flame.base.model.Params"
+		resultType="int">
+		SELECT count(*) FROM T_PAPER
+		<include refid="findPaper_contion" />
+	</select>
+	<!-- 单选题 -->
+	<select id="selestSingleChoices" parameterType="com.flame.dto.PaperDto"
+		resultType="com.flame.dto.ExamQuestionDto">
+		SELECT
+		id ID,
+		QUESTION_TYPE questionType,
+		QUESTION_CONTENT
+		questionContent,
+		PIC
+		pic,
+		OPTION_A optionA,
+		OPTION_B optionB,
+		OPTION_C
+		optionC,
+		OPTION_D
+		optionD,
+		OPTION_E optionE,
+		OPTION_F optionF,
+		SUBJECT
+		subject
+		FROM
+		EXAM_QUESTION WHERE QUESTION_TYPE='单选题' AND
+		SUBJECT=#{subject,jdbcType=VARCHAR}
+	</select>
+	<!-- 多选题 -->
+	<select id="selestMultipleChoices" parameterType="com.flame.dto.PaperDto"
+		resultType="com.flame.dto.ExamQuestionDto">
+		SELECT
+		id ID,
+		QUESTION_TYPE questionType,
+		QUESTION_CONTENT
+		questionContent,
+		PIC
+		pic,
+		OPTION_A optionA,
+		OPTION_B optionB,
+		OPTION_C
+		optionC,
+		OPTION_D
+		optionD,
+		OPTION_E optionE,
+		OPTION_F optionF,
+		SUBJECT
+		subject
+		FROM
+		EXAM_QUESTION WHERE QUESTION_TYPE='多选题' AND
+		SUBJECT=#{subject,jdbcType=VARCHAR}
+	</select>
+	<!-- 判断题 -->
+	<select id="selestTrueOrFalses" parameterType="com.flame.dto.PaperDto"
+		resultType="com.flame.entity.ExamQuestion">
+		SELECT
+		id ID,
+		QUESTION_TYPE questionType,
+		QUESTION_CONTENT
+		questionContent,
+		PIC
+		pic,
+		OPTION_A optionA,
+		OPTION_B optionB,
+		OPTION_C
+		optionC,
+		OPTION_D
+		optionD,
+		OPTION_E optionE,
+		OPTION_F optionF,
+		SUBJECT
+		subject
+		FROM
+		EXAM_QUESTION WHERE QUESTION_TYPE='判断题' AND
+		SUBJECT=#{subject,jdbcType=VARCHAR}
+	</select>
+	<!-- 填空题 -->
+	<select id="selestBlankQuestions" parameterType="com.flame.dto.PaperDto"
+		resultType="com.flame.entity.ExamQuestion">
+		SELECT
+		id ID,
+		QUESTION_TYPE questionType,
+		QUESTION_CONTENT
+		questionContent,
+		PIC
+		pic,
+		OPTION_A optionA,
+		OPTION_B optionB,
+		OPTION_C
+		optionC,
+		OPTION_D
+		optionD,
+		OPTION_E optionE,
+		OPTION_F optionF,
+		SUBJECT
+		subject
+		FROM
+		EXAM_QUESTION WHERE QUESTION_TYPE='填空题' AND
+		SUBJECT=#{subject,jdbcType=VARCHAR}
+	</select>
+	<!-- 问答题 -->
+	<select id="selestQuestionsAndAnswers" parameterType="com.flame.dto.PaperDto"
+		resultType="com.flame.entity.ExamQuestion">
+		SELECT
+		id ID,
+		QUESTION_TYPE questionType,
+		QUESTION_CONTENT
+		questionContent,
+		PIC
+		pic,
+		OPTION_A optionA,
+		OPTION_B optionB,
+		OPTION_C
+		optionC,
+		OPTION_D
+		optionD,
+		OPTION_E optionE,
+		OPTION_F optionF,
+		SUBJECT
+		subject
+		FROM
+		EXAM_QUESTION WHERE QUESTION_TYPE='问答题' AND
+		SUBJECT=#{subject,jdbcType=VARCHAR}
+	</select>
+
+	<select id="selectParer" parameterType="map" resultType="com.flame.dto.PaperDto">
+		<include refid="selectFieldSQL" />
+		FROM T_PAPER
+		<where>
+			<if test="paperId!=null">
+				AND t_paper.id=#{paperId,jdbcType=INTEGER}
+			</if>
+			<if test="isRandom!=null">
+				AND is_random=#{isRandom,jdbcType=TINYINT}
+			</if>
+			<if test="newDate!=null">
+				AND paper_end_time<![CDATA[ >= ]]>#{newDate,jdbcType=TIMESTAMP}
+				and paper_start_time<![CDATA[ <= ]]>#{newDate,jdbcType=TIMESTAMP}
+			</if>
+		</where>
+	</select>
+
+	<select id="selectReadPaper" parameterType="map"
+		resultType="com.flame.entity.Paper">
+		<include refid="selectFieldSQL" />
+		FROM T_PAPER WHERE t_paper.id in
+		(
+		SELECT DISTINCT
+		t_student_scort.paper_id
+		FROM
+		t_student_scort
+		WHERE
+		t_student_scort.is_complete = FALSE
+		)
+	</select>
+
+
+	<select id="selectPaperByName" parameterType="string"
+		resultType="com.flame.entity.Paper">
+		SELECT id FROM t_paper where
+		paper_name=#{paperName,jdbcType=VARCHAR}
+	</select>
+</mapper>   

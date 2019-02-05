@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="UTF-8" ?>   
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.flame.dao.impl.ExamQuestionDaoImpl">
+
+	<!-- 插入实体 -->
+	<insert id="insert" parameterType="com.flame.entity.ExamQuestion">
+		INSERT INTO EXAM_QUESTION (
+		ID,
+		QUESTION_TYPE,
+		QUESTION_CLAIM,
+		QUESTION_CONTENT,
+		PIC,
+		OPTION_A,
+		OPTION_B,
+		OPTION_C,
+		OPTION_D,
+		OPTION_E,
+		OPTION_F,
+		ANSWER,
+		SUBJECT,
+		SCORT
+		) VALUES (
+		#{id,jdbcType=INTEGER},
+		#{questionType,jdbcType=VARCHAR},
+		#{questionClaim,jdbcType=VARCHAR},
+		#{questionContent,jdbcType=VARCHAR},
+		#{pic,jdbcType=VARCHAR},
+		#{optionA,jdbcType=VARCHAR},
+		#{optionB,jdbcType=VARCHAR},
+		#{optionC,jdbcType=VARCHAR},
+		#{optionD,jdbcType=VARCHAR},
+		#{optionE,jdbcType=VARCHAR},
+		#{optionF,jdbcType=VARCHAR},
+		#{answer,jdbcType=VARCHAR},
+		#{subject,jdbcType=VARCHAR},
+		#{scort,jdbcType=DECIMAL}
+		)
+		<selectKey databaseId="mysql" keyProperty="id" order="AFTER"
+			resultType="long">
+			SELECT LAST_INSERT_ID() AS ID
+		</selectKey>
+		<selectKey databaseId="oracle" keyProperty="id" order="BEFORE"
+			resultType="long">
+			SELECT SEQ_EXAM_QUESTION.nextval as id FROM dual
+		</selectKey>
+	</insert>
+
+	<!-- 更新实体 -->
+	<update id="update" parameterType="com.flame.entity.ExamQuestion">
+		UPDATE EXAM_QUESTION
+		<set>
+			<if test="questionType != null">
+				QUESTION_TYPE = #{questionType,jdbcType=VARCHAR},
+			</if>
+			<if test="questionClaim != null">
+				QUESTION_CLAIM = #{questionClaim,jdbcType=VARCHAR},
+			</if>
+			<if test="questionContent != null">
+				QUESTION_CONTENT = #{questionContent,jdbcType=VARCHAR},
+			</if>
+			<if test="pic != null">
+				PIC = #{pic,jdbcType=VARCHAR},
+			</if>
+			<if test="optionA != null">
+				OPTION_A = #{optionA,jdbcType=VARCHAR},
+			</if>
+			<if test="optionB != null">
+				OPTION_B = #{optionB,jdbcType=VARCHAR},
+			</if>
+			<if test="optionC != null">
+				OPTION_C = #{optionC,jdbcType=VARCHAR},
+			</if>
+			<if test="optionD != null">
+				OPTION_D = #{optionD,jdbcType=VARCHAR},
+			</if>
+			<if test="optionE != null">
+				OPTION_E = #{optionE,jdbcType=VARCHAR},
+			</if>
+			<if test="optionF != null">
+				OPTION_F = #{optionF,jdbcType=VARCHAR},
+			</if>
+			<if test="answer != null">
+				ANSWER = #{answer,jdbcType=VARCHAR},
+			</if>
+			<if test="subject != null">
+				SUBJECT = #{subject,jdbcType=VARCHAR},
+			</if>
+			<if test="scort != null">
+				SCORT = #{scort,jdbcType=DECIMAL},
+			</if>
+		</set>
+		WHERE ID = #{id,jdbcType=INTEGER}
+	</update>
+
+	<!-- 更新实体 -->
+	<update id="updateFields" parameterType="com.flame.entity.ExamQuestion">
+		UPDATE EXAM_QUESTION
+		<set>
+			QUESTION_TYPE = #{questionType,jdbcType=VARCHAR},
+			QUESTION_CLAIM =
+			#{questionClaim,jdbcType=VARCHAR},
+			QUESTION_CONTENT =
+			#{questionContent,jdbcType=VARCHAR},
+			PIC = #{pic,jdbcType=VARCHAR},
+			OPTION_A = #{optionA,jdbcType=VARCHAR},
+			OPTION_B =
+			#{optionB,jdbcType=VARCHAR},
+			OPTION_C = #{optionC,jdbcType=VARCHAR},
+			OPTION_D = #{optionD,jdbcType=VARCHAR},
+			OPTION_E =
+			#{optionE,jdbcType=VARCHAR},
+			OPTION_F = #{optionF,jdbcType=VARCHAR},
+			ANSWER = #{answer,jdbcType=VARCHAR},
+			SUBJECT =
+			#{subject,jdbcType=VARCHAR},
+			SCORT = #{scort,jdbcType=DECIMAL},
+		</set>
+		WHERE ID = #{id,jdbcType=INTEGER}
+	</update>
+
+	<!-- 删除实体 -->
+	<update id="delete" parameterType="com.flame.entity.ExamQuestion">
+		DELETE FROM EXAM_QUESTION
+		WHERE ID = #{id,jdbcType=INTEGER}
+	</update>
+
+	<!-- 查询字段 -->
+	<sql id="selectFieldSQL">
+		SELECT
+		ID id,
+		QUESTION_TYPE questionType,
+		QUESTION_CLAIM questionClaim,
+		QUESTION_CONTENT questionContent,
+		PIC pic,
+		OPTION_A optionA,
+		OPTION_B optionB,
+		OPTION_C optionC,
+		OPTION_D optionD,
+		OPTION_E optionE,
+		OPTION_F optionF,
+		ANSWER answer,
+		SUBJECT subject,
+		SCORT scort
+	</sql>
+
+	<!-- 查询 -->
+	<select id="get" parameterType="map" resultType="com.flame.entity.ExamQuestion">
+		<include refid="selectFieldSQL" />
+		FROM EXAM_QUESTION
+		WHERE ID = #{id,jdbcType=INTEGER}
+	</select>
+
+	<!-- 查询 -->
+	<select id="find" parameterType="com.flame.entity.ExamQuestion"
+		resultType="com.flame.entity.ExamQuestion">
+		<include refid="selectFieldSQL" />
+		FROM EXAM_QUESTION
+		<where>
+			<if test="id != null">
+				AND ID = #{id,jdbcType=INTEGER}
+			</if>
+			<if test="questionType != null and questionType != ''">
+				AND QUESTION_TYPE = #{questionType,jdbcType=VARCHAR}
+			</if>
+			<if test="questionClaim != null and questionClaim != ''">
+				AND QUESTION_CLAIM = #{questionClaim,jdbcType=VARCHAR}
+			</if>
+			<if test="questionContent != null and questionContent != ''">
+				AND QUESTION_CONTENT =
+				#{questionContent,jdbcType=VARCHAR}
+			</if>
+			<if test="pic != null and pic != ''">
+				AND PIC = #{pic,jdbcType=VARCHAR}
+			</if>
+			<if test="optionA != null and optionA != ''">
+				AND OPTION_A = #{optionA,jdbcType=VARCHAR}
+			</if>
+			<if test="optionB != null and optionB != ''">
+				AND OPTION_B = #{optionB,jdbcType=VARCHAR}
+			</if>
+			<if test="optionC != null and optionC != ''">
+				AND OPTION_C = #{optionC,jdbcType=VARCHAR}
+			</if>
+			<if test="optionD != null and optionD != ''">
+				AND OPTION_D = #{optionD,jdbcType=VARCHAR}
+			</if>
+			<if test="optionE != null and optionE != ''">
+				AND OPTION_E = #{optionE,jdbcType=VARCHAR}
+			</if>
+			<if test="optionF != null and optionF != ''">
+				AND OPTION_F = #{optionF,jdbcType=VARCHAR}
+			</if>
+			<if test="answer != null and answer != ''">
+				AND ANSWER = #{answer,jdbcType=VARCHAR}
+			</if>
+			<if test="subject != null and subject != ''">
+				AND SUBJECT = #{subject,jdbcType=VARCHAR}
+			</if>
+			<if test="scort != null">
+				AND SCORT = #{scort,jdbcType=DECIMAL}
+			</if>
+		</where>
+	</select>
+
+	<!-- 查询所有 -->
+	<select id="findAll" parameterType="map"
+		resultType="com.flame.entity.ExamQuestion">
+		<include refid="selectFieldSQL" />
+		FROM EXAM_QUESTION
+	</select>
+
+	<!-- 分页查询（条件） -->
+	<sql id="page_condition">
+		<where>
+			<if test="entity.questionType != null and entity.questionType != ''">
+				AND QUESTION_TYPE = #{entity.questionType,jdbcType=VARCHAR}
+			</if>
+			<if test="entity.questionClaim != null and entity.questionClaim != ''">
+				AND QUESTION_CLAIM = #{entity.questionClaim,jdbcType=VARCHAR}
+			</if>
+			<if test="entity.questionContent != null and entity.questionContent != ''">
+				AND QUESTION_CONTENT = #{entity.questionContent,jdbcType=VARCHAR}
+			</if>
+			<if test="entity.pic != null and entity.pic != ''">
+				AND PIC = #{entity.pic,jdbcType=VARCHAR}
+			</if>
+			<if test="entity.optionA != null and entity.optionA != ''">
+				AND OPTION_A = #{entity.optionA,jdbcType=VARCHAR}
+			</if>
+			<if test="entity.optionB != null and entity.optionB != ''">
+				AND OPTION_B = #{entity.optionB,jdbcType=VARCHAR}
+			</if>
+			<if test="entity.optionC != null and entity.optionC != ''">
+				AND OPTION_C = #{entity.optionC,jdbcType=VARCHAR}
+			</if>
+			<if test="entity.optionD != null and entity.optionD != ''">
+				AND OPTION_D = #{entity.optionD,jdbcType=VARCHAR}
+			</if>
+			<if test="entity.optionE != null and entity.optionE != ''">
+				AND OPTION_E = #{entity.optionE,jdbcType=VARCHAR}
+			</if>
+			<if test="entity.optionF != null and entity.optionF != ''">
+				AND OPTION_F = #{entity.optionF,jdbcType=VARCHAR}
+			</if>
+			<if test="entity.answer != null and entity.answer != ''">
+				AND ANSWER = #{entity.answer,jdbcType=VARCHAR}
+			</if>
+			<if test="entity.subject != null and entity.subject != ''">
+				AND SUBJECT = #{entity.subject,jdbcType=VARCHAR}
+			</if>
+			<if test="entity.scort != null">
+				AND SCORT = #{entity.scort,jdbcType=DECIMAL}
+			</if>
+		</where>
+	</sql>
+
+	<!-- 分页查询（计数） -->
+	<select id="page_count" parameterType="map" resultType="int">
+		SELECT count(*)
+		FROM EXAM_QUESTION
+		<include refid="page_condition" />
+	</select>
+
+	<!-- 分页查询（数据） -->
+	<select id="page_datas" parameterType="map"
+		resultType="com.flame.entity.ExamQuestion">
+		<include refid="mybatis.pageStartSQL" />
+		<include refid="selectFieldSQL" />
+		FROM EXAM_QUESTION
+		<include refid="page_condition" />
+		<include refid="mybatis.pageEndSQL" />
+	</select>
+
+</mapper>   

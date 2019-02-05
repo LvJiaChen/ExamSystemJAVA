@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<decorators defaultdir="/WEB-INF/decorators">
+
+	<excludes>
+	</excludes>
+
+	<decorator name="blank" page="blank.jsp" />
+
+	<!-- order.jsp developer.jsp -->
+	<decorator name="demo" page="demo.jsp">
+		<!-- demo -->
+		<pattern>/demoView/index*</pattern>
+	</decorator>
+</decorators>

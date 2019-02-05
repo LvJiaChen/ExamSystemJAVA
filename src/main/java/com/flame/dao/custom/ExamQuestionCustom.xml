@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8" ?>   
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.flame.dao.impl.ExamQuestionDaoImpl">
+	<!-- 分页查询题目内容 -->
+	<sql id="findQuestion_content">
+		SELECT
+		ID id,
+		pic pic,
+		QUESTION_TYPE questionType,
+		QUESTION_CLAIM
+		questionClaim,
+		QUESTION_CONTENT questionContent,
+		OPTION_A optionA,
+		OPTION_B optionB,
+		OPTION_C optionC,
+		OPTION_D optionD,
+		OPTION_E optionE,
+		OPTION_F optionF,
+		ANSWER answer,
+		SUBJECT subject,
+		SCORT scort
+	</sql>
+	<sql id="findQuestion_contion">
+		<where>
+			<if test="entity.questionType!='' and entity.questionType!=null">
+				AND QUESTION_TYPE=#{entity.questionType,jdbcType=VARCHAR}
+			</if>
+			<if test="entity.questionContent!='' and entity.questionContent!=null">
+				AND QUESTION_CONTENT LIKE
+				concat('%',
+				#{entity.questionContent,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="entity.subject!='' and entity.subject!=null">
+				AND SUBJECT=#{entity.subject,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</sql>
+	<select id="findQuestion_datas" parameterType="com.flame.base.model.Params"
+		resultType="com.flame.dto.ExamQuestionDto">
+		<include refid="mybatis.pageStartSQL" />
+		<include refid="findQuestion_content" />
+		FROM EXAM_QUESTION
+		<include refid="findQuestion_contion"></include>
+		<include refid="mybatis.pageEndSQL" />
+	</select>
+	<select id="findQuestion_count" parameterType="com.flame.base.model.Params"
+		resultType="int">
+		SELECT count(*) FROM EXAM_QUESTION
+		<include refid="findQuestion_contion" />
+	</select>
+
+	<insert id="importExcel" parameterType="java.util.List">
+		insert into exam_question (question_type,
+		question_claim,question_content, option_a, option_b,option_c,
+		option_d,option_e,option_f,answer,subject,scort)
+		values
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			(#{item.questionType}, #{item.questionClaim},
+			#{item.questionContent},#{item.optionA}, #{item.optionB},
+			#{item.optionC}, #{item.optionD},#{item.optionE}, #{item.optionF},
+			#{item.answer}, #{item.subject}, #{item.scort})
+		</foreach>
+	</insert>
+
+	<select id="selectObjectiveQuestions" parameterType="long"
+		resultType="com.flame.entity.ExamQuestion">
+		SELECT answer FROM EXAM_QUESTION WHERE
+		id=#{questionId,jdbcType=INTEGER} AND (question_type="单选题" or
+		question_type="多选题" or question_type="判断题")
+	</select>
+
+	<!-- 分页查询题目内容为了添加到试卷 -->
+	<sql id="findQuestionForAdd_content">
+		SELECT
+		ID id,
+		QUESTION_TYPE questionType,
+		QUESTION_CLAIM
+		questionClaim,
+		QUESTION_CONTENT questionContent,
+		OPTION_A optionA,
+		OPTION_B optionB,
+		OPTION_C optionC,
+		OPTION_D optionD,
+		OPTION_E optionE,
+		OPTION_F optionF,
+		ANSWER answer,
+		SUBJECT subject,
+		SCORT scort
+	</sql>
+	<sql id="findQuestionForAdd_contion">
+		<where>
+			<if test="entity.questionType!='' and entity.questionType!=null">
+				AND QUESTION_TYPE=#{entity.questionType,jdbcType=VARCHAR}
+			</if>
+			<if test="entity.questionContent!='' and entity.questionContent!=null">
+				AND QUESTION_CONTENT LIKE
+				concat('%',
+				#{entity.questionContent,jdbcType=VARCHAR}, '%')
+			</if>
+			<if test="entity.subject!='' and entity.subject!=null">
+				AND SUBJECT=#{entity.subject,jdbcType=VARCHAR}
+			</if>
+			AND EXAM_QUESTION.id not in(SELECT question_id id FROM
+			t_paper_question WHERE paper_id=#{entity.paperId,jdbcType=INTEGER})
+		</where>
+	</sql>
+	<select id="findQuestionForAdd_datas" parameterType="com.flame.base.model.Params"
+		resultType="com.flame.dto.ExamQuestionDto">
+		<include refid="mybatis.pageStartSQL" />
+		<include refid="findQuestionForAdd_content" />
+		FROM EXAM_QUESTION
+		<include refid="findQuestionForAdd_contion"></include>
+		<include refid="mybatis.pageEndSQL" />
+	</select>
+	<select id="findQuestionForAdd_count" parameterType="com.flame.base.model.Params"
+		resultType="int">
+		SELECT count(*) FROM EXAM_QUESTION
+		<include refid="findQuestionForAdd_contion" />
+	</select>
+</mapper>   

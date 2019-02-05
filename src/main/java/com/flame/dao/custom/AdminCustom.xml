@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>   
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.flame.dao.impl.AdminDaoImpl">
+	<!-- 分页查询管理员内容 -->
+	<sql id="findAdmin_contion">
+		<where>
+			<if test="entity.name!='' and entity.name!=null">
+				AND NAME LIKE
+				concat('%',
+				#{entity.name,jdbcType=VARCHAR},
+				'%')
+			</if>
+			<if test="entity.teacherNo!='' and entity.teacherNo!=null">
+				AND TEACHER_NO=#{entity.teacherNo,jdbcType=VARCHAR}
+			</if>
+			<if test="entity.department!='' and entity.department!=null">
+				AND department=#{entity.department,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</sql>
+	<select id="findAdmin_datas" parameterType="com.flame.base.model.Params"
+		resultType="com.flame.dto.AdminPageDto">
+		<include refid="mybatis.pageStartSQL" />
+		<include refid="selectFieldSQL" />
+		FROM T_ADMIN
+		<include refid="findAdmin_contion"></include>
+		<include refid="mybatis.pageEndSQL" />
+	</select>
+	<select id="findAdmin_count" parameterType="com.flame.base.model.Params"
+		resultType="int">
+		SELECT count(*) FROM T_ADMIN
+		<include refid="findAdmin_contion" />
+	</select>
+	<select id="selectByTeacherNo" parameterType="com.flame.entity.Admin"
+		resultType="com.flame.entity.Admin">
+		<include refid="selectFieldSQL" />
+		FROM T_ADMIN WHERE teacher_no=#{teacherNo,jdbcType=VARCHAR}
+	</select>
+	<select id="selectByName" parameterType="com.flame.entity.Admin"
+		resultType="com.flame.entity.Admin">
+		<include refid="selectFieldSQL" />
+		FROM T_ADMIN WHERE name=#{name,jdbcType=VARCHAR}
+	</select>
+	<select id="selectSubject" parameterType="map"
+		resultType="com.flame.entity.Paper">
+		SELECT paper_name paperName from t_paper
+	</select>
+</mapper>   

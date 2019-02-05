@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>   
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.flame.dao.impl.StudentScortDaoImpl">
+	<select id="selectSumScort" parameterType="com.flame.dto.QuestionSumDto"
+		resultType="com.flame.entity.StudentScort">
+		<include refid="selectFieldSQL"></include>
+		FROM T_STUDENT_SCORT WHERE STUDENT_ID=#{studentId,jdbcType=INTEGER}
+		AND PAPER_ID=#{paperId,jdbcType=INTEGER}
+	</select>
+</mapper>   

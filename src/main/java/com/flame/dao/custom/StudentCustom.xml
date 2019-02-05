@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8" ?>   
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.flame.dao.impl.StudentDaoImpl">
+	<!-- 分页查询学生内容 -->
+	<sql id="findStudentAll_contion">
+		<where>
+			<if test="entity.name!='' and entity.name!=null">
+				AND NAME LIKE
+				concat('%', #{entity.name,jdbcType=VARCHAR},
+				'%')
+			</if>
+			<if test="entity.stuNo!='' and entity.stuNo!=null">
+				AND STU_NO=#{entity.stuNo,jdbcType=VARCHAR}
+			</if>
+			<if test="entity.tClass!='' and entity.tClass!=null">
+				AND t_class=#{entity.tClass,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</sql>
+	<select id="findStudentAll_datas" parameterType="com.flame.base.model.Params"
+		resultType="com.flame.dto.StudentPageDto">
+		<include refid="mybatis.pageStartSQL" />
+		<include refid="selectFieldSQL" />
+		FROM T_STUDENT
+		<include refid="findStudentAll_contion"></include>
+		<include refid="mybatis.pageEndSQL" />
+	</select>
+	<select id="findStudentAll_count" parameterType="com.flame.base.model.Params"
+		resultType="int">
+		SELECT count(*) FROM T_STUDENT
+		<include refid="findStudentAll_contion" />
+	</select>
+
+	<select id="selectByName" parameterType="com.flame.entity.Student"
+		resultType="com.flame.entity.Student">
+		<include refid="selectFieldSQL" />
+		FROM t_student WHERE name=#{name,jdbcType=VARCHAR}
+	</select>
+	<select id="selectByStuNo" parameterType="com.flame.entity.Student"
+		resultType="com.flame.entity.Student">
+		<include refid="selectFieldSQL" />
+		FROM t_student WHERE stu_no=#{stuNo,jdbcType=VARCHAR}
+	</select>
+	<select id="selectScore" parameterType="com.flame.entity.Student"
+		resultType="com.flame.dto.StudentScoreDto">
+		SELECT
+		t_paper.paper_name paperName,
+		t_paper.`subject`,
+		t_student.`name` studentName,
+		t_student.sex,
+		t_student.stu_no stuNo,
+		t_student.t_class tClass,
+		a.sumScort
+		FROM
+		(
+		SELECT
+		t_student_scort.student_id studentId,
+		t_student_scort.paper_id paperId,
+		t_student_scort.sum_scort sumScort
+		FROM
+		t_student_scort
+		WHERE
+		t_student_scort.student_id = #{id,jdbcType=INTEGER}
+		AND
+		t_student_scort.is_complete = TRUE
+		) a
+		LEFT JOIN t_paper ON t_paper.id =
+		a.paperId
+		LEFT JOIN t_student ON t_student.id = a.studentId
+	</select>
+	<select id="selectClass" parameterType="map"
+		resultType="com.flame.entity.Student">
+		SELECT distinct t_class tClass FROM T_STUDENT
+	</select>
+
+	<!-- 班级成绩查询 -->
+	<select id="selectScorePage_count" parameterType="com.flame.base.model.Params"
+		resultType="int">
+		<!-- 先按照学生查询成绩班级什么的，试卷信息另外加一个查询，然后在Java 中自己加进去 -->
+		SELECT
+		count(*)
+		FROM
+		t_student_scort LEFT JOIN t_paper ON
+		t_student_scort.paper_id=t_paper.id
+		LEFT JOIN t_student ON
+		t_student_scort.student_id=t_student.id
+		<where>
+			<if test="entity.stuNo!='' and entity.stuNo!=null">
+				and t_student.`stu_no`=#{entity.stuNo,jdbcType=VARCHAR}
+			</if>
+			<if test="entity.name!='' and entity.name!=null">
+				and t_student.`name`=#{entity.name,jdbcType=VARCHAR}
+			</if>
+			<if test="entity.paperName!='' and entity.paperName!=null">
+				and t_paper.paper_name=#{entity.paperName,jdbcType=VARCHAR}
+			</if>
+			<if test="entity.tClass!='' and entity.tClass!=null">
+				AND t_student.t_class = #{entity.tClass,jdbcType=VARCHAR}
+			</if>
+		</where>
+	</select>
+	<select id="selectScorePage_datas" parameterType="com.flame.base.model.Params"
+		resultType="com.flame.dto.StudentScoreDto">
+		<include refid="mybatis.pageStartSQL" />
+		SELECT
+		t_student_scort.sum_scort sumScort,
+		t_student_scort.paper_id
+		paperId,
+		t_paper.paper_name paperName,
+		t_paper.`subject`,
+		t_student.`name` studentName,
+		t_student.sex,
+		t_student.stu_no stuNo,
+		t_student.t_class tClass
+		FROM
+		t_student_scort LEFT JOIN t_paper ON
+		t_student_scort.paper_id=t_paper.id
+		LEFT JOIN t_student ON
+		t_student_scort.student_id=t_student.id
+		<where>
+			<if test="entity.stuNo!='' and entity.stuNo!=null">
+				and t_student.`stu_no`=#{entity.stuNo,jdbcType=VARCHAR}
+			</if>
+			<if test="entity.name!='' and entity.name!=null">
+				and t_student.`name`=#{entity.name,jdbcType=VARCHAR}
+			</if>
+			<if test="entity.paperName!='' and entity.paperName!=null">
+				and t_paper.paper_name=#{entity.paperName,jdbcType=VARCHAR}
+			</if>
+			<if test="entity.tClass!='' and entity.tClass!=null">
+				AND t_student.t_class = #{entity.tClass,jdbcType=VARCHAR}
+			</if>
+		</where>
+		<include refid="mybatis.pageEndSQL" />
+	</select>
+
+	<!-- 批量插入学生 -->
+	<insert id="importExcel" parameterType="java.util.List">
+		insert into t_student (stu_no,
+		password,name, sex, t_class,state)
+		values
+		<foreach collection="list" item="item" index="index"
+			separator=",">
+			(#{item.stuNo}, #{item.password},
+			#{item.name},#{item.sex},
+			#{item.tClass},
+			#{item.state})
+		</foreach>
+	</insert>
+
+	<select id="performanceAnalysis" parameterType="map" resultType="com.flame.dto.AnalysisDto">
+		SELECT
+		nnd AS 'scort',
+		count(*) AS 'num'
+		FROM
+		(
+		SELECT
+		CASE
+		WHEN sum_scort  <![CDATA[< ]]> 60 THEN
+		'0-60'
+		WHEN sum_scort  <![CDATA[>= ]]> 60
+		AND sum_scort  <![CDATA[<= ]]> 74 THEN
+		'60-75'
+		WHEN sum_scort <![CDATA[>= ]]> 75
+		AND sum_scort <![CDATA[<= ]]> 84 THEN
+		'75-85'
+		WHEN sum_scort  <![CDATA[>= ]]>85 THEN
+		'85-100'
+		END AS nnd
+		FROM
+		t_student_scort
+		WHERE
+		paper_id = #{paperId,jdbcType=BIGINT}
+		AND is_complete = 1
+		) a
+		GROUP BY
+		nnd
+	</select>
+</mapper>   

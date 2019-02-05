@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8" ?>   
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.flame.dao.impl.AdminDaoImpl">
+
+	<!-- 插入实体 -->
+	<insert id="insert" parameterType="com.flame.entity.Admin">
+		INSERT INTO T_ADMIN (
+		ID,
+		TEACHER_NO,
+		NAME,
+		PASSWORD,
+		DEPARTMENT,
+		TYPES
+		) VALUES (
+		#{id,jdbcType=INTEGER},
+		#{teacherNo,jdbcType=VARCHAR},
+		#{name,jdbcType=VARCHAR},
+		#{password,jdbcType=VARCHAR},
+		#{department,jdbcType=VARCHAR},
+		#{types,jdbcType=INTEGER}
+		)
+		<selectKey databaseId="mysql" keyProperty="id" order="AFTER"
+			resultType="long">
+			SELECT LAST_INSERT_ID() AS ID
+		</selectKey>
+		<selectKey databaseId="oracle" keyProperty="id" order="BEFORE"
+			resultType="long">
+			SELECT SEQ_T_ADMIN.nextval as id FROM dual
+		</selectKey>
+	</insert>
+
+	<!-- 更新实体 -->
+	<update id="update" parameterType="com.flame.entity.Admin">
+		UPDATE T_ADMIN
+		<set>
+			<if test="teacherNo != null">
+				TEACHER_NO = #{teacherNo,jdbcType=VARCHAR},
+			</if>
+			<if test="name != null">
+				NAME = #{name,jdbcType=VARCHAR},
+			</if>
+			<if test="password != null">
+				PASSWORD = #{password,jdbcType=VARCHAR},
+			</if>
+			<if test="department != null">
+				DEPARTMENT = #{department,jdbcType=VARCHAR},
+			</if>
+			<if test="types != null">
+				TYPES = #{types,jdbcType=INTEGER},
+			</if>
+		</set>
+		WHERE ID = #{id,jdbcType=INTEGER}
+	</update>
+
+	<!-- 更新实体 -->
+	<update id="updateFields" parameterType="com.flame.entity.Admin">
+		UPDATE T_ADMIN
+		<set>
+			TEACHER_NO = #{teacherNo,jdbcType=VARCHAR},
+			NAME =
+			#{name,jdbcType=VARCHAR},
+			PASSWORD = #{password,jdbcType=VARCHAR},
+			DEPARTMENT = #{department,jdbcType=VARCHAR},
+			TYPES =
+			#{types,jdbcType=INTEGER},
+		</set>
+		WHERE ID = #{id,jdbcType=INTEGER}
+	</update>
+
+	<!-- 删除实体 -->
+	<update id="delete" parameterType="com.flame.entity.Admin">
+		DELETE FROM T_ADMIN WHERE ID =
+		#{id,jdbcType=INTEGER}
+	</update>
+
+	<!-- 查询字段 -->
+	<sql id="selectFieldSQL">
+		SELECT
+		ID id,
+		TEACHER_NO teacherNo,
+		NAME name,
+		PASSWORD password,
+		DEPARTMENT department,
+		TYPES types
+	</sql>
+
+	<!-- 查询 -->
+	<select id="get" parameterType="map" resultType="com.flame.entity.Admin">
+		<include refid="selectFieldSQL" />
+		FROM T_ADMIN
+		WHERE ID = #{id,jdbcType=INTEGER}
+	</select>
+
+	<!-- 查询 -->
+	<select id="find" parameterType="com.flame.entity.Admin"
+		resultType="com.flame.entity.Admin">
+		<include refid="selectFieldSQL" />
+		FROM T_ADMIN
+		<where>
+			<if test="id != null">
+				AND ID = #{id,jdbcType=INTEGER}
+			</if>
+			<if test="teacherNo != null and teacherNo != ''">
+				AND TEACHER_NO = #{teacherNo,jdbcType=VARCHAR}
+			</if>
+			<if test="name != null and name != ''">
+				AND NAME = #{name,jdbcType=VARCHAR}
+			</if>
+			<if test="password != null and password != ''">
+				AND PASSWORD = #{password,jdbcType=VARCHAR}
+			</if>
+			<if test="department != null and department != ''">
+				AND DEPARTMENT = #{department,jdbcType=VARCHAR}
+			</if>
+			<if test="types != null">
+				AND TYPES = #{types,jdbcType=INTEGER}
+			</if>
+		</where>
+	</select>
+
+	<!-- 查询所有 -->
+	<select id="findAll" parameterType="map" resultType="com.flame.entity.Admin">
+		<include refid="selectFieldSQL" />
+		FROM T_ADMIN
+	</select>
+
+	<!-- 分页查询（条件） -->
+	<sql id="page_condition">
+		<where>
+			<if test="entity.teacherNo != null and entity.teacherNo != ''">
+				AND TEACHER_NO = #{entity.teacherNo,jdbcType=VARCHAR}
+			</if>
+			<if test="entity.name != null and entity.name != ''">
+				AND NAME = #{entity.name,jdbcType=VARCHAR}
+			</if>
+			<if test="entity.password != null and entity.password != ''">
+				AND PASSWORD = #{entity.password,jdbcType=VARCHAR}
+			</if>
+			<if test="entity.department != null and entity.department != ''">
+				AND DEPARTMENT = #{entity.department,jdbcType=VARCHAR}
+			</if>
+			<if test="entity.types != null">
+				AND TYPES = #{entity.types,jdbcType=INTEGER}
+			</if>
+		</where>
+	</sql>
+
+	<!-- 分页查询（计数） -->
+	<select id="page_count" parameterType="map" resultType="int">
+		SELECT count(*)
+		FROM T_ADMIN
+		<include refid="page_condition" />
+	</select>
+
+	<!-- 分页查询（数据） -->
+	<select id="page_datas" parameterType="map" resultType="com.flame.entity.Admin">
+		<include refid="mybatis.pageStartSQL" />
+		<include refid="selectFieldSQL" />
+		FROM T_ADMIN
+		<include refid="page_condition" />
+		<include refid="mybatis.pageEndSQL" />
+	</select>
+
+</mapper>   

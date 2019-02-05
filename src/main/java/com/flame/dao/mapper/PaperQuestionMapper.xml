@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>   
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.flame.dao.impl.PaperQuestionDaoImpl">
+
+	<!-- 插入实体 -->
+	<insert id="insert" parameterType="com.flame.entity.PaperQuestion">
+		INSERT INTO T_PAPER_QUESTION (
+		ID,
+		PAPER_ID,
+		QUESTION_ID
+		) VALUES (
+		#{id,jdbcType=INTEGER},
+		#{paperId,jdbcType=INTEGER},
+		#{questionId,jdbcType=INTEGER}
+		)
+		<selectKey databaseId="mysql" keyProperty="id" order="AFTER"
+			resultType="long">
+			SELECT LAST_INSERT_ID() AS ID
+		</selectKey>
+		<selectKey databaseId="oracle" keyProperty="id" order="BEFORE"
+			resultType="long">
+			SELECT SEQ_T_PAPER_QUESTION.nextval as id FROM dual
+		</selectKey>
+	</insert>
+
+	<!-- 更新实体 -->
+	<update id="update" parameterType="com.flame.entity.PaperQuestion">
+		UPDATE T_PAPER_QUESTION
+		<set>
+			<if test="paperId != null">
+				PAPER_ID = #{paperId,jdbcType=INTEGER},
+			</if>
+			<if test="questionId != null">
+				QUESTION_ID = #{questionId,jdbcType=INTEGER},
+			</if>
+		</set>
+		WHERE ID = #{id,jdbcType=INTEGER}
+	</update>
+
+	<!-- 更新实体 -->
+	<update id="updateFields" parameterType="com.flame.entity.PaperQuestion">
+		UPDATE T_PAPER_QUESTION
+		<set>
+			PAPER_ID = #{paperId,jdbcType=INTEGER},
+			QUESTION_ID =
+			#{questionId,jdbcType=INTEGER},
+		</set>
+		WHERE ID = #{id,jdbcType=INTEGER}
+	</update>
+
+	<!-- 删除实体 -->
+	<update id="delete" parameterType="com.flame.entity.PaperQuestion">
+		DELETE FROM T_PAPER_QUESTION
+		WHERE ID = #{id,jdbcType=INTEGER}
+	</update>
+
+	<!-- 查询字段 -->
+	<sql id="selectFieldSQL">
+		SELECT
+		ID id,
+		PAPER_ID paperId,
+		QUESTION_ID questionId
+	</sql>
+
+	<!-- 查询 -->
+	<select id="get" parameterType="map" resultType="com.flame.entity.PaperQuestion">
+		<include refid="selectFieldSQL" />
+		FROM T_PAPER_QUESTION
+		WHERE ID = #{id,jdbcType=INTEGER}
+	</select>
+
+	<!-- 查询 -->
+	<select id="find" parameterType="com.flame.entity.PaperQuestion"
+		resultType="com.flame.entity.PaperQuestion">
+		<include refid="selectFieldSQL" />
+		FROM T_PAPER_QUESTION
+		<where>
+			<if test="id != null">
+				AND ID = #{id,jdbcType=INTEGER}
+			</if>
+			<if test="paperId != null">
+				AND PAPER_ID = #{paperId,jdbcType=INTEGER}
+			</if>
+			<if test="questionId != null">
+				AND QUESTION_ID = #{questionId,jdbcType=INTEGER}
+			</if>
+		</where>
+	</select>
+
+	<!-- 查询所有 -->
+	<select id="findAll" parameterType="map"
+		resultType="com.flame.entity.PaperQuestion">
+		<include refid="selectFieldSQL" />
+		FROM T_PAPER_QUESTION
+	</select>
+
+	<!-- 分页查询（条件） -->
+	<sql id="page_condition">
+		<where>
+			<if test="entity.paperId != null">
+				AND PAPER_ID = #{entity.paperId,jdbcType=INTEGER}
+			</if>
+			<if test="entity.questionId != null">
+				AND QUESTION_ID = #{entity.questionId,jdbcType=INTEGER}
+			</if>
+		</where>
+	</sql>
+
+	<!-- 分页查询（计数） -->
+	<select id="page_count" parameterType="map" resultType="int">
+		SELECT count(*)
+		FROM T_PAPER_QUESTION
+		<include refid="page_condition" />
+	</select>
+
+	<!-- 分页查询（数据） -->
+	<select id="page_datas" parameterType="map"
+		resultType="com.flame.entity.PaperQuestion">
+		<include refid="mybatis.pageStartSQL" />
+		<include refid="selectFieldSQL" />
+		FROM T_PAPER_QUESTION
+		<include refid="page_condition" />
+		<include refid="mybatis.pageEndSQL" />
+	</select>
+
+</mapper>   

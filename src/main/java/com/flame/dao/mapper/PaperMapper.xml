@@ -1,0 +1,327 @@
+<?xml version="1.0" encoding="UTF-8" ?>   
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.flame.dao.impl.PaperDaoImpl">
+
+	<!-- 插入实体 -->
+	<insert id="insert" parameterType="com.flame.entity.Paper">
+		INSERT INTO T_PAPER (
+		   	ID,
+		   	PAPER_NAME,
+		   	ADMIN_ID,
+		   	EXAM_TYPE,
+		   	PAPER_TIME,
+		   	PAPER_END_TIME,
+		   	PAPER_START_TIME,
+		   	SUBJECT,
+		   	SINGLE_CHOICE_NUM,
+		   	SINGLE_CHOICE_SCORT,
+		   	MULTIPLE_CHOICE_NUM,
+		   	MULTIPLE_CHOICE_SCORT,
+		   	TRUE_OR_FALSE_NUM,
+		   	TRUE_OR_FALSE_SCORT,
+		   	BLANK_QUESTION_NUM,
+		   	BLANK_QUESTION_SCORT,
+		   	QUESTIONS_AND_ANSWERS_NUM,
+		   	QUESTIONS_AND_ANSWERS_SCORTS,
+		   	IS_RANDOM
+		) VALUES (
+		   	#{id,jdbcType=INTEGER},
+		   	#{paperName,jdbcType=VARCHAR},
+		   	#{adminId,jdbcType=INTEGER},
+		   	#{examType,jdbcType=INTEGER},
+		   	#{paperTime,jdbcType=INTEGER},
+		   	#{paperEndTime,jdbcType=TIMESTAMP},
+		   	#{paperStartTime,jdbcType=TIMESTAMP},
+		   	#{subject,jdbcType=VARCHAR},
+		   	#{singleChoiceNum,jdbcType=INTEGER},
+		   	#{singleChoiceScort,jdbcType=DECIMAL},
+		   	#{multipleChoiceNum,jdbcType=INTEGER},
+		   	#{multipleChoiceScort,jdbcType=DECIMAL},
+		   	#{trueOrFalseNum,jdbcType=INTEGER},
+		   	#{trueOrFalseScort,jdbcType=DECIMAL},
+		   	#{blankQuestionNum,jdbcType=INTEGER},
+		   	#{blankQuestionScort,jdbcType=DECIMAL},
+		   	#{questionsAndAnswersNum,jdbcType=INTEGER},
+		   	#{questionsAndAnswersScorts,jdbcType=VARCHAR},
+		   	#{isRandom,jdbcType=TINYINT}
+		)
+		<selectKey databaseId="mysql" keyProperty="id" order="AFTER" resultType="long">
+			SELECT LAST_INSERT_ID() AS ID
+		</selectKey>
+		<selectKey databaseId="oracle" keyProperty="id" order="BEFORE" resultType="long">
+			SELECT SEQ_T_PAPER.nextval as id FROM dual
+		</selectKey>
+	</insert>
+
+	<!-- 更新实体 -->
+	<update id="update" parameterType="com.flame.entity.Paper">
+		UPDATE T_PAPER
+		<set>
+			<if test="paperName != null">
+				PAPER_NAME = #{paperName,jdbcType=VARCHAR},
+			</if>
+			<if test="adminId != null">
+				ADMIN_ID = #{adminId,jdbcType=INTEGER},
+			</if>
+			<if test="examType != null">
+				EXAM_TYPE = #{examType,jdbcType=INTEGER},
+			</if>
+			<if test="paperTime != null">
+				PAPER_TIME = #{paperTime,jdbcType=INTEGER},
+			</if>
+			<if test="paperEndTime != null">
+				PAPER_END_TIME = #{paperEndTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="paperStartTime != null">
+				PAPER_START_TIME = #{paperStartTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="subject != null">
+				SUBJECT = #{subject,jdbcType=VARCHAR},
+			</if>
+			<if test="singleChoiceNum != null">
+				SINGLE_CHOICE_NUM = #{singleChoiceNum,jdbcType=INTEGER},
+			</if>
+			<if test="singleChoiceScort != null">
+				SINGLE_CHOICE_SCORT = #{singleChoiceScort,jdbcType=DECIMAL},
+			</if>
+			<if test="multipleChoiceNum != null">
+				MULTIPLE_CHOICE_NUM = #{multipleChoiceNum,jdbcType=INTEGER},
+			</if>
+			<if test="multipleChoiceScort != null">
+				MULTIPLE_CHOICE_SCORT = #{multipleChoiceScort,jdbcType=DECIMAL},
+			</if>
+			<if test="trueOrFalseNum != null">
+				TRUE_OR_FALSE_NUM = #{trueOrFalseNum,jdbcType=INTEGER},
+			</if>
+			<if test="trueOrFalseScort != null">
+				TRUE_OR_FALSE_SCORT = #{trueOrFalseScort,jdbcType=DECIMAL},
+			</if>
+			<if test="blankQuestionNum != null">
+				BLANK_QUESTION_NUM = #{blankQuestionNum,jdbcType=INTEGER},
+			</if>
+			<if test="blankQuestionScort != null">
+				BLANK_QUESTION_SCORT = #{blankQuestionScort,jdbcType=DECIMAL},
+			</if>
+			<if test="questionsAndAnswersNum != null">
+				QUESTIONS_AND_ANSWERS_NUM = #{questionsAndAnswersNum,jdbcType=INTEGER},
+			</if>
+			<if test="questionsAndAnswersScorts != null">
+				QUESTIONS_AND_ANSWERS_SCORTS = #{questionsAndAnswersScorts,jdbcType=VARCHAR},
+			</if>
+			<if test="isRandom != null">
+				IS_RANDOM = #{isRandom,jdbcType=TINYINT},
+			</if>
+		</set>
+		WHERE ID = #{id,jdbcType=INTEGER}
+	</update>
+	
+	<!-- 更新实体 -->
+	<update id="updateFields" parameterType="com.flame.entity.Paper">
+		UPDATE T_PAPER
+		<set>
+			PAPER_NAME = #{paperName,jdbcType=VARCHAR},
+			ADMIN_ID = #{adminId,jdbcType=INTEGER},
+			EXAM_TYPE = #{examType,jdbcType=INTEGER},
+			PAPER_TIME = #{paperTime,jdbcType=INTEGER},
+			PAPER_END_TIME = #{paperEndTime,jdbcType=TIMESTAMP},
+			PAPER_START_TIME = #{paperStartTime,jdbcType=TIMESTAMP},
+			SUBJECT = #{subject,jdbcType=VARCHAR},
+			SINGLE_CHOICE_NUM = #{singleChoiceNum,jdbcType=INTEGER},
+			SINGLE_CHOICE_SCORT = #{singleChoiceScort,jdbcType=DECIMAL},
+			MULTIPLE_CHOICE_NUM = #{multipleChoiceNum,jdbcType=INTEGER},
+			MULTIPLE_CHOICE_SCORT = #{multipleChoiceScort,jdbcType=DECIMAL},
+			TRUE_OR_FALSE_NUM = #{trueOrFalseNum,jdbcType=INTEGER},
+			TRUE_OR_FALSE_SCORT = #{trueOrFalseScort,jdbcType=DECIMAL},
+			BLANK_QUESTION_NUM = #{blankQuestionNum,jdbcType=INTEGER},
+			BLANK_QUESTION_SCORT = #{blankQuestionScort,jdbcType=DECIMAL},
+			QUESTIONS_AND_ANSWERS_NUM = #{questionsAndAnswersNum,jdbcType=INTEGER},
+			QUESTIONS_AND_ANSWERS_SCORTS = #{questionsAndAnswersScorts,jdbcType=VARCHAR},
+			IS_RANDOM = #{isRandom,jdbcType=TINYINT},
+		</set>
+		WHERE ID = #{id,jdbcType=INTEGER}
+	</update>
+
+	<!-- 删除实体 -->
+	<update id="delete" parameterType="com.flame.entity.Paper">
+		DELETE FROM T_PAPER WHERE ID = #{id,jdbcType=INTEGER}
+	</update>
+
+	<!-- 查询字段 -->
+	<sql id="selectFieldSQL">
+		SELECT 
+		       ID id,
+		       PAPER_NAME paperName,
+		       ADMIN_ID adminId,
+		       EXAM_TYPE examType,
+		       PAPER_TIME paperTime,
+		       PAPER_END_TIME paperEndTime,
+		       PAPER_START_TIME paperStartTime,
+		       SUBJECT subject,
+		       SINGLE_CHOICE_NUM singleChoiceNum,
+		       SINGLE_CHOICE_SCORT singleChoiceScort,
+		       MULTIPLE_CHOICE_NUM multipleChoiceNum,
+		       MULTIPLE_CHOICE_SCORT multipleChoiceScort,
+		       TRUE_OR_FALSE_NUM trueOrFalseNum,
+		       TRUE_OR_FALSE_SCORT trueOrFalseScort,
+		       BLANK_QUESTION_NUM blankQuestionNum,
+		       BLANK_QUESTION_SCORT blankQuestionScort,
+		       QUESTIONS_AND_ANSWERS_NUM questionsAndAnswersNum,
+		       QUESTIONS_AND_ANSWERS_SCORTS questionsAndAnswersScorts,
+		       IS_RANDOM isRandom
+	</sql>
+
+	<!-- 查询 -->
+	<select id="get" parameterType="map" resultType="com.flame.entity.Paper">
+		<include refid="selectFieldSQL" />
+		  FROM T_PAPER
+		 WHERE ID = #{id,jdbcType=INTEGER}
+	</select>
+
+	<!-- 查询 -->
+	<select id="find" parameterType="com.flame.entity.Paper" resultType="com.flame.entity.Paper">
+		<include refid="selectFieldSQL" />
+		  FROM T_PAPER
+		<where>
+			<if test="id != null">
+				AND ID = #{id,jdbcType=INTEGER}
+			</if>
+			<if test="paperName != null and paperName != ''">
+				AND PAPER_NAME = #{paperName,jdbcType=VARCHAR}
+			</if>
+			<if test="adminId != null">
+				AND ADMIN_ID = #{adminId,jdbcType=INTEGER}
+			</if>
+			<if test="examType != null">
+				AND EXAM_TYPE = #{examType,jdbcType=INTEGER}
+			</if>
+			<if test="paperTime != null">
+				AND PAPER_TIME = #{paperTime,jdbcType=INTEGER}
+			</if>
+			<if test="paperEndTime != null">
+				AND PAPER_END_TIME = #{paperEndTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="paperStartTime != null">
+				AND PAPER_START_TIME = #{paperStartTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="subject != null and subject != ''">
+				AND SUBJECT = #{subject,jdbcType=VARCHAR}
+			</if>
+			<if test="singleChoiceNum != null">
+				AND SINGLE_CHOICE_NUM = #{singleChoiceNum,jdbcType=INTEGER}
+			</if>
+			<if test="singleChoiceScort != null">
+				AND SINGLE_CHOICE_SCORT = #{singleChoiceScort,jdbcType=DECIMAL}
+			</if>
+			<if test="multipleChoiceNum != null">
+				AND MULTIPLE_CHOICE_NUM = #{multipleChoiceNum,jdbcType=INTEGER}
+			</if>
+			<if test="multipleChoiceScort != null">
+				AND MULTIPLE_CHOICE_SCORT = #{multipleChoiceScort,jdbcType=DECIMAL}
+			</if>
+			<if test="trueOrFalseNum != null">
+				AND TRUE_OR_FALSE_NUM = #{trueOrFalseNum,jdbcType=INTEGER}
+			</if>
+			<if test="trueOrFalseScort != null">
+				AND TRUE_OR_FALSE_SCORT = #{trueOrFalseScort,jdbcType=DECIMAL}
+			</if>
+			<if test="blankQuestionNum != null">
+				AND BLANK_QUESTION_NUM = #{blankQuestionNum,jdbcType=INTEGER}
+			</if>
+			<if test="blankQuestionScort != null">
+				AND BLANK_QUESTION_SCORT = #{blankQuestionScort,jdbcType=DECIMAL}
+			</if>
+			<if test="questionsAndAnswersNum != null">
+				AND QUESTIONS_AND_ANSWERS_NUM = #{questionsAndAnswersNum,jdbcType=INTEGER}
+			</if>
+			<if test="questionsAndAnswersScorts != null and questionsAndAnswersScorts != ''">
+				AND QUESTIONS_AND_ANSWERS_SCORTS = #{questionsAndAnswersScorts,jdbcType=VARCHAR}
+			</if>
+			<if test="isRandom != null">
+				AND IS_RANDOM = #{isRandom,jdbcType=TINYINT}
+			</if>
+		</where>
+	</select>
+
+	<!-- 查询所有 -->
+	<select id="findAll" parameterType="map" resultType="com.flame.entity.Paper">
+		<include refid="selectFieldSQL" />
+		  FROM T_PAPER
+	</select>
+
+	<!-- 分页查询（条件） -->
+	<sql id="page_condition">
+		<where>
+				<if test="entity.paperName != null and entity.paperName != ''">
+					AND PAPER_NAME = #{entity.paperName,jdbcType=VARCHAR}
+				</if>
+				<if test="entity.adminId != null">
+					AND ADMIN_ID = #{entity.adminId,jdbcType=INTEGER}
+				</if>
+				<if test="entity.examType != null">
+					AND EXAM_TYPE = #{entity.examType,jdbcType=INTEGER}
+				</if>
+				<if test="entity.paperTime != null">
+					AND PAPER_TIME = #{entity.paperTime,jdbcType=INTEGER}
+				</if>
+				<if test="entity.paperEndTime != null">
+					AND PAPER_END_TIME = #{entity.paperEndTime,jdbcType=TIMESTAMP}
+				</if>
+				<if test="entity.paperStartTime != null">
+					AND PAPER_START_TIME = #{entity.paperStartTime,jdbcType=TIMESTAMP}
+				</if>
+				<if test="entity.subject != null and entity.subject != ''">
+					AND SUBJECT = #{entity.subject,jdbcType=VARCHAR}
+				</if>
+				<if test="entity.singleChoiceNum != null">
+					AND SINGLE_CHOICE_NUM = #{entity.singleChoiceNum,jdbcType=INTEGER}
+				</if>
+				<if test="entity.singleChoiceScort != null">
+					AND SINGLE_CHOICE_SCORT = #{entity.singleChoiceScort,jdbcType=DECIMAL}
+				</if>
+				<if test="entity.multipleChoiceNum != null">
+					AND MULTIPLE_CHOICE_NUM = #{entity.multipleChoiceNum,jdbcType=INTEGER}
+				</if>
+				<if test="entity.multipleChoiceScort != null">
+					AND MULTIPLE_CHOICE_SCORT = #{entity.multipleChoiceScort,jdbcType=DECIMAL}
+				</if>
+				<if test="entity.trueOrFalseNum != null">
+					AND TRUE_OR_FALSE_NUM = #{entity.trueOrFalseNum,jdbcType=INTEGER}
+				</if>
+				<if test="entity.trueOrFalseScort != null">
+					AND TRUE_OR_FALSE_SCORT = #{entity.trueOrFalseScort,jdbcType=DECIMAL}
+				</if>
+				<if test="entity.blankQuestionNum != null">
+					AND BLANK_QUESTION_NUM = #{entity.blankQuestionNum,jdbcType=INTEGER}
+				</if>
+				<if test="entity.blankQuestionScort != null">
+					AND BLANK_QUESTION_SCORT = #{entity.blankQuestionScort,jdbcType=DECIMAL}
+				</if>
+				<if test="entity.questionsAndAnswersNum != null">
+					AND QUESTIONS_AND_ANSWERS_NUM = #{entity.questionsAndAnswersNum,jdbcType=INTEGER}
+				</if>
+				<if test="entity.questionsAndAnswersScorts != null and entity.questionsAndAnswersScorts != ''">
+					AND QUESTIONS_AND_ANSWERS_SCORTS = #{entity.questionsAndAnswersScorts,jdbcType=VARCHAR}
+				</if>
+				<if test="entity.isRandom != null">
+					AND IS_RANDOM = #{entity.isRandom,jdbcType=TINYINT}
+				</if>
+		</where>
+	</sql>
+
+	<!-- 分页查询（计数） -->
+	<select id="page_count" parameterType="map" resultType="int">
+		SELECT count(*)
+		  FROM T_PAPER
+		<include refid="page_condition" />
+	</select>
+
+	<!-- 分页查询（数据） -->
+	<select id="page_datas" parameterType="map" resultType="com.flame.entity.Paper">
+		<include refid="mybatis.pageStartSQL" />
+		<include refid="selectFieldSQL" />
+		  FROM T_PAPER
+		<include refid="page_condition" />
+		<include refid="mybatis.pageEndSQL" />
+	</select>
+
+</mapper>   

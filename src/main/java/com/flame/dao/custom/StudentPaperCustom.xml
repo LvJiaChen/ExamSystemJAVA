@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" ?>   
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.flame.dao.impl.StudentPaperDaoImpl">
+	<select id="selectStudentId" parameterType="long"
+		resultType="com.flame.entity.Student">
+		SELECT DISTINCT STUDENT_ID id
+		FROM T_STUDENT_PAPER WHERE
+		PAPER_ID=#{PaperId,jdbcType=INTEGER} AND
+		IS_CHECK=false
+	</select>
+
+	<select id="selectQuestion" parameterType="map"
+		resultType="com.flame.dto.ExamQuestionDto">
+		SELECT
+		ID id,
+		QUESTION_TYPE questionType,
+		QUESTION_CLAIM
+		questionClaim,
+		QUESTION_CONTENT questionContent,
+		PIC pic,
+		OPTION_A
+		optionA,
+		OPTION_B optionB,
+		OPTION_C optionC,
+		OPTION_D optionD,
+		OPTION_E
+		optionE,
+		OPTION_F optionF,
+		exam_question.answer trueAnswer,
+		a.ANSWER answer,
+		SUBJECT subject,
+		SCORT scort
+		FROM
+		exam_question
+		RIGHT JOIN (
+		SELECT
+		t_student_paper.question_id,
+		t_student_paper.answer
+		FROM
+		t_student_paper
+		WHERE
+		t_student_paper.paper_id =
+		#{paperId,jdbcType=INTEGER}
+		AND
+		t_student_paper.student_id =
+		#{studentId,jdbcType=INTEGER}
+		AND
+		t_student_paper.is_check = FALSE
+		) a
+		ON exam_question.id=a.question_id
+
+	</select>
+
+	<select id="selectByPaperIdStudentId" parameterType="com.flame.dto.QuestionSumDto"
+		resultType="com.flame.entity.StudentPaper">
+		<include refid="selectFieldSQL"></include>
+		FROM T_STUDENT_PAPER WHERE STUDENT_ID=#{studentId,jdbcType=INTEGER}
+		AND PAPER_ID=#{paperId,jdbcType=INTEGER}
+	</select>
+
+</mapper>

@@ -1,0 +1,180 @@
+<?xml version="1.0" encoding="UTF-8" ?>   
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.flame.dao.impl.StudentScortDaoImpl">
+
+	<!-- 插入实体 -->
+	<insert id="insert" parameterType="com.flame.entity.StudentScort">
+		INSERT INTO T_STUDENT_SCORT (
+		ID,
+		STUDENT_ID,
+		PAPER_ID,
+		SUM_SCORT,
+		START_TIME,
+		END_TIME,
+		IS_COMPLETE
+		) VALUES (
+		#{id,jdbcType=INTEGER},
+		#{studentId,jdbcType=INTEGER},
+		#{paperId,jdbcType=INTEGER},
+		#{sumScort,jdbcType=DECIMAL},
+		#{startTime,jdbcType=TIMESTAMP},
+		#{endTime,jdbcType=TIMESTAMP},
+		#{isComplete,jdbcType=TINYINT}
+		)
+		<selectKey databaseId="mysql" keyProperty="id" order="AFTER"
+			resultType="long">
+			SELECT LAST_INSERT_ID() AS ID
+		</selectKey>
+		<selectKey databaseId="oracle" keyProperty="id" order="BEFORE"
+			resultType="long">
+			SELECT SEQ_T_STUDENT_SCORT.nextval as id FROM dual
+		</selectKey>
+	</insert>
+
+	<!-- 更新实体 -->
+	<update id="update" parameterType="com.flame.entity.StudentScort">
+		UPDATE T_STUDENT_SCORT
+		<set>
+			<if test="studentId != null">
+				STUDENT_ID = #{studentId,jdbcType=INTEGER},
+			</if>
+			<if test="paperId != null">
+				PAPER_ID = #{paperId,jdbcType=INTEGER},
+			</if>
+			<if test="sumScort != null">
+				SUM_SCORT = #{sumScort,jdbcType=DECIMAL},
+			</if>
+			<if test="startTime != null">
+				START_TIME = #{startTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="endTime != null">
+				END_TIME = #{endTime,jdbcType=TIMESTAMP},
+			</if>
+			<if test="isComplete != null">
+				IS_COMPLETE = #{isComplete,jdbcType=TINYINT},
+			</if>
+		</set>
+		WHERE ID = #{id,jdbcType=INTEGER}
+	</update>
+
+	<!-- 更新实体 -->
+	<update id="updateFields" parameterType="com.flame.entity.StudentScort">
+		UPDATE T_STUDENT_SCORT
+		<set>
+			STUDENT_ID = #{studentId,jdbcType=INTEGER},
+			PAPER_ID =
+			#{paperId,jdbcType=INTEGER},
+			SUM_SCORT = #{sumScort,jdbcType=DECIMAL},
+			START_TIME = #{startTime,jdbcType=TIMESTAMP},
+			END_TIME =
+			#{endTime,jdbcType=TIMESTAMP},
+			IS_COMPLETE =
+			#{isComplete,jdbcType=TINYINT},
+		</set>
+		WHERE ID = #{id,jdbcType=INTEGER}
+	</update>
+
+	<!-- 删除实体 -->
+	<update id="delete" parameterType="com.flame.entity.StudentScort">
+		DELETE FROM T_STUDENT_SCORT
+		WHERE ID = #{id,jdbcType=INTEGER}
+	</update>
+
+	<!-- 查询字段 -->
+	<sql id="selectFieldSQL">
+		SELECT
+		ID id,
+		STUDENT_ID studentId,
+		PAPER_ID paperId,
+		SUM_SCORT sumScort,
+		START_TIME startTime,
+		END_TIME endTime,
+		IS_COMPLETE isComplete
+	</sql>
+
+	<!-- 查询 -->
+	<select id="get" parameterType="map" resultType="com.flame.entity.StudentScort">
+		<include refid="selectFieldSQL" />
+		FROM T_STUDENT_SCORT
+		WHERE ID = #{id,jdbcType=INTEGER}
+	</select>
+
+	<!-- 查询 -->
+	<select id="find" parameterType="com.flame.entity.StudentScort"
+		resultType="com.flame.entity.StudentScort">
+		<include refid="selectFieldSQL" />
+		FROM T_STUDENT_SCORT
+		<where>
+			<if test="id != null">
+				AND ID = #{id,jdbcType=INTEGER}
+			</if>
+			<if test="studentId != null">
+				AND STUDENT_ID = #{studentId,jdbcType=INTEGER}
+			</if>
+			<if test="paperId != null">
+				AND PAPER_ID = #{paperId,jdbcType=INTEGER}
+			</if>
+			<if test="sumScort != null">
+				AND SUM_SCORT = #{sumScort,jdbcType=DECIMAL}
+			</if>
+			<if test="startTime != null">
+				AND START_TIME = #{startTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="endTime != null">
+				AND END_TIME = #{endTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="isComplete != null">
+				AND IS_COMPLETE = #{isComplete,jdbcType=TINYINT}
+			</if>
+		</where>
+	</select>
+
+	<!-- 查询所有 -->
+	<select id="findAll" parameterType="map"
+		resultType="com.flame.entity.StudentScort">
+		<include refid="selectFieldSQL" />
+		FROM T_STUDENT_SCORT
+	</select>
+
+	<!-- 分页查询（条件） -->
+	<sql id="page_condition">
+		<where>
+			<if test="entity.studentId != null">
+				AND STUDENT_ID = #{entity.studentId,jdbcType=INTEGER}
+			</if>
+			<if test="entity.paperId != null">
+				AND PAPER_ID = #{entity.paperId,jdbcType=INTEGER}
+			</if>
+			<if test="entity.sumScort != null">
+				AND SUM_SCORT = #{entity.sumScort,jdbcType=DECIMAL}
+			</if>
+			<if test="entity.startTime != null">
+				AND START_TIME = #{entity.startTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="entity.endTime != null">
+				AND END_TIME = #{entity.endTime,jdbcType=TIMESTAMP}
+			</if>
+			<if test="entity.isComplete != null">
+				AND IS_COMPLETE = #{entity.isComplete,jdbcType=TINYINT}
+			</if>
+		</where>
+	</sql>
+
+	<!-- 分页查询（计数） -->
+	<select id="page_count" parameterType="map" resultType="int">
+		SELECT count(*)
+		FROM T_STUDENT_SCORT
+		<include refid="page_condition" />
+	</select>
+
+	<!-- 分页查询（数据） -->
+	<select id="page_datas" parameterType="map"
+		resultType="com.flame.entity.StudentScort">
+		<include refid="mybatis.pageStartSQL" />
+		<include refid="selectFieldSQL" />
+		FROM T_STUDENT_SCORT
+		<include refid="page_condition" />
+		<include refid="mybatis.pageEndSQL" />
+	</select>
+
+</mapper>   

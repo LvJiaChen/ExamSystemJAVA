@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>   
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.flame.dao.impl.PaperQuestionDaoImpl">
+	<select id="selectQuestIdByPaperId" parameterType="long"
+		resultType="com.flame.entity.PaperQuestion">
+		<include refid="selectFieldSQL" />
+		FROM t_paper_question WHERE paper_id=#{id,jdbcType=INTEGER}
+	</select>
+
+	<select id="getQuestionIds" parameterType="long"
+		resultType="com.flame.dto.ExamQuestionDto">
+		SELECT
+		exam_question.ID id,
+		exam_question.QUESTION_TYPE
+		questionType,
+		exam_question.QUESTION_CLAIM questionClaim,
+		exam_question.QUESTION_CONTENT questionContent,
+		exam_question.PIC pic,
+		exam_question.OPTION_A optionA,
+		exam_question.OPTION_B optionB,
+		exam_question.OPTION_C optionC,
+		exam_question.OPTION_D optionD,
+		exam_question.OPTION_E optionE,
+		exam_question.OPTION_F optionF,
+		SUBJECT
+		SUBJECT,
+		SCORT scort
+		FROM
+		t_paper_question
+		LEFT JOIN exam_question ON
+		t_paper_question.question_id = exam_question.id
+		WHERE
+		t_paper_question.paper_id = #{paperId,jdbcType=INTEGER}
+	</select>
+
+	<delete id="deleteQuestFixedPaper" parameterType="com.flame.entity.PaperQuestion">
+		DELETE FROM
+		t_paper_question WHERE paper_id=#{paperId,jdbcType=INTEGER} AND
+		question_id=#{questionId,jdbcType=INTEGER}
+	</delete>
+</mapper>   

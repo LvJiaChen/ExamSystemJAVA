@@ -1,0 +1,194 @@
+<?xml version="1.0" encoding="UTF-8" ?>   
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.flame.dao.impl.StudentPaperDaoImpl">
+
+	<!-- 插入实体 -->
+	<insert id="insert" parameterType="com.flame.entity.StudentPaper">
+		INSERT INTO T_STUDENT_PAPER (
+		ID,
+		STUDENT_ID,
+		PAPER_ID,
+		QUESTION_ID,
+		QUESTION_SCORT,
+		ANSWER,
+		SUM_SCORT,
+		IS_CHECK
+		) VALUES (
+		#{id,jdbcType=INTEGER},
+		#{studentId,jdbcType=INTEGER},
+		#{paperId,jdbcType=INTEGER},
+		#{questionId,jdbcType=INTEGER},
+		#{questionScort,jdbcType=DECIMAL},
+		#{answer,jdbcType=VARCHAR},
+		#{sumScort,jdbcType=DECIMAL},
+		#{isCheck,jdbcType=TINYINT}
+		)
+		<selectKey databaseId="mysql" keyProperty="id" order="AFTER"
+			resultType="long">
+			SELECT LAST_INSERT_ID() AS ID
+		</selectKey>
+		<selectKey databaseId="oracle" keyProperty="id" order="BEFORE"
+			resultType="long">
+			SELECT SEQ_T_STUDENT_PAPER.nextval as id FROM dual
+		</selectKey>
+	</insert>
+
+	<!-- 更新实体 -->
+	<update id="update" parameterType="com.flame.entity.StudentPaper">
+		UPDATE T_STUDENT_PAPER
+		<set>
+			<if test="studentId != null">
+				STUDENT_ID = #{studentId,jdbcType=INTEGER},
+			</if>
+			<if test="paperId != null">
+				PAPER_ID = #{paperId,jdbcType=INTEGER},
+			</if>
+			<if test="questionId != null">
+				QUESTION_ID = #{questionId,jdbcType=INTEGER},
+			</if>
+			<if test="questionScort != null">
+				QUESTION_SCORT = #{questionScort,jdbcType=DECIMAL},
+			</if>
+			<if test="answer != null">
+				ANSWER = #{answer,jdbcType=VARCHAR},
+			</if>
+			<if test="sumScort != null">
+				SUM_SCORT = #{sumScort,jdbcType=DECIMAL},
+			</if>
+			<if test="isCheck != null">
+				IS_CHECK = #{isCheck,jdbcType=TINYINT},
+			</if>
+		</set>
+		WHERE ID = #{id,jdbcType=INTEGER}
+	</update>
+
+	<!-- 更新实体 -->
+	<update id="updateFields" parameterType="com.flame.entity.StudentPaper">
+		UPDATE T_STUDENT_PAPER
+		<set>
+			STUDENT_ID = #{studentId,jdbcType=INTEGER},
+			PAPER_ID =
+			#{paperId,jdbcType=INTEGER},
+			QUESTION_ID =
+			#{questionId,jdbcType=INTEGER},
+			QUESTION_SCORT =
+			#{questionScort,jdbcType=DECIMAL},
+			ANSWER =
+			#{answer,jdbcType=VARCHAR},
+			SUM_SCORT = #{sumScort,jdbcType=DECIMAL},
+			IS_CHECK = #{isCheck,jdbcType=TINYINT},
+		</set>
+		WHERE ID = #{id,jdbcType=INTEGER}
+	</update>
+
+	<!-- 删除实体 -->
+	<update id="delete" parameterType="com.flame.entity.StudentPaper">
+		DELETE FROM T_STUDENT_PAPER
+		WHERE ID = #{id,jdbcType=INTEGER}
+	</update>
+
+	<!-- 查询字段 -->
+	<sql id="selectFieldSQL">
+		SELECT
+		ID id,
+		STUDENT_ID studentId,
+		PAPER_ID paperId,
+		QUESTION_ID questionId,
+		QUESTION_SCORT questionScort,
+		ANSWER answer,
+		SUM_SCORT sumScort,
+		IS_CHECK isCheck
+	</sql>
+
+	<!-- 查询 -->
+	<select id="get" parameterType="map" resultType="com.flame.entity.StudentPaper">
+		<include refid="selectFieldSQL" />
+		FROM T_STUDENT_PAPER
+		WHERE ID = #{id,jdbcType=INTEGER}
+	</select>
+
+	<!-- 查询 -->
+	<select id="find" parameterType="com.flame.entity.StudentPaper"
+		resultType="com.flame.entity.StudentPaper">
+		<include refid="selectFieldSQL" />
+		FROM T_STUDENT_PAPER
+		<where>
+			<if test="id != null">
+				AND ID = #{id,jdbcType=INTEGER}
+			</if>
+			<if test="studentId != null">
+				AND STUDENT_ID = #{studentId,jdbcType=INTEGER}
+			</if>
+			<if test="paperId != null">
+				AND PAPER_ID = #{paperId,jdbcType=INTEGER}
+			</if>
+			<if test="questionId != null">
+				AND QUESTION_ID = #{questionId,jdbcType=INTEGER}
+			</if>
+			<if test="questionScort != null">
+				AND QUESTION_SCORT = #{questionScort,jdbcType=DECIMAL}
+			</if>
+			<if test="answer != null and answer != ''">
+				AND ANSWER = #{answer,jdbcType=VARCHAR}
+			</if>
+			<if test="sumScort != null">
+				AND SUM_SCORT = #{sumScort,jdbcType=DECIMAL}
+			</if>
+			<if test="isCheck != null">
+				AND IS_CHECK = #{isCheck,jdbcType=TINYINT}
+			</if>
+		</where>
+	</select>
+
+	<!-- 查询所有 -->
+	<select id="findAll" parameterType="map"
+		resultType="com.flame.entity.StudentPaper">
+		<include refid="selectFieldSQL" />
+		FROM T_STUDENT_PAPER
+	</select>
+
+	<!-- 分页查询（条件） -->
+	<sql id="page_condition">
+		<where>
+			<if test="entity.studentId != null">
+				AND STUDENT_ID = #{entity.studentId,jdbcType=INTEGER}
+			</if>
+			<if test="entity.paperId != null">
+				AND PAPER_ID = #{entity.paperId,jdbcType=INTEGER}
+			</if>
+			<if test="entity.questionId != null">
+				AND QUESTION_ID = #{entity.questionId,jdbcType=INTEGER}
+			</if>
+			<if test="entity.questionScort != null">
+				AND QUESTION_SCORT = #{entity.questionScort,jdbcType=DECIMAL}
+			</if>
+			<if test="entity.answer != null and entity.answer != ''">
+				AND ANSWER = #{entity.answer,jdbcType=VARCHAR}
+			</if>
+			<if test="entity.sumScort != null">
+				AND SUM_SCORT = #{entity.sumScort,jdbcType=DECIMAL}
+			</if>
+			<if test="entity.isCheck != null">
+				AND IS_CHECK = #{entity.isCheck,jdbcType=TINYINT}
+			</if>
+		</where>
+	</sql>
+
+	<!-- 分页查询（计数） -->
+	<select id="page_count" parameterType="map" resultType="int">
+		SELECT count(*)
+		FROM T_STUDENT_PAPER
+		<include refid="page_condition" />
+	</select>
+
+	<!-- 分页查询（数据） -->
+	<select id="page_datas" parameterType="map"
+		resultType="com.flame.entity.StudentPaper">
+		<include refid="mybatis.pageStartSQL" />
+		<include refid="selectFieldSQL" />
+		FROM T_STUDENT_PAPER
+		<include refid="page_condition" />
+		<include refid="mybatis.pageEndSQL" />
+	</select>
+
+</mapper>   
